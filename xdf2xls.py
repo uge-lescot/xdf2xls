@@ -24,7 +24,7 @@ def xdf2xls(xdf_file: str) -> None:
                 df = df.join(pd.DataFrame(y))
                 names = {i: label['label'][0] for i, label in enumerate(descs)}
                 df.rename(columns=names, inplace=True)
-            df.to_excel(writer, sheet_name=stream['info']['name'][0], startrow=0, startcol=0)
+            df.to_excel(writer, sheet_name=stream['info']['name'][0][:31], startrow=0, startcol=0)
 
 
 def main():
