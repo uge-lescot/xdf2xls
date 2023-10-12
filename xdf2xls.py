@@ -5,6 +5,15 @@ import pandas as pd
 import numpy as np
 
 
+def desc_to_label(desc):
+    s = desc['label'][0]
+    try:
+        s += f" ({desc['unit'][0]})"
+    except IndexError:
+        pass
+    return s
+
+
 def xdf2xls(xdf_file: str) -> None:
     data, header = pyxdf.load_xdf(xdf_file)
     with pd.ExcelWriter(f"{xdf_file}.xls", engine='xlsxwriter') as writer:
@@ -18,11 +27,11 @@ def xdf2xls(xdf_file: str) -> None:
                 print(f"Failed to find channels for {stream['info']['name'][0]}")
                 continue
             if isinstance(y, list):
-                for yy, label in zip(zip(*y), descs):
-                    df[label['label'][0]] = yy
+                for yy, desc in zip(zip(*y), descs):
+                    df[desc_to_label(desc)] = yy
             elif isinstance(y, np.ndarray):
                 df = df.join(pd.DataFrame(y))
-                names = {i: label['label'][0] for i, label in enumerate(descs)}
+                names = {i: desc_to_label(desc) for i, desc in enumerate(descs)}
                 df.rename(columns=names, inplace=True)
             df.to_excel(writer, sheet_name=stream['info']['name'][0][:31], startrow=0, startcol=0)
 
