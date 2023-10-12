@@ -16,7 +16,11 @@ def desc_to_label(desc):
 
 def xdf2xls(xdf_file: str) -> None:
     data, header = pyxdf.load_xdf(xdf_file)
-    with pd.ExcelWriter(f"{xdf_file}.xls", engine='xlsxwriter') as writer:
+    if xdf_file.endswith(".xdf"):
+        xls_file = xdf_file[:-4] + ".xls"
+    else:
+        xls_file = xdf_file + ".xls"
+    with pd.ExcelWriter(xls_file, engine='xlsxwriter') as writer:
         for stream in data:
             df = pd.DataFrame()
             df['timestamps'] = stream['time_stamps']
