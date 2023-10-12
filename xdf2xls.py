@@ -1,4 +1,5 @@
 import sys
+import logging as log
 
 import pyxdf
 import pandas as pd
@@ -15,11 +16,13 @@ def desc_to_label(desc):
 
 
 def xdf2xls(xdf_file: str) -> None:
+    log.info(f"Opening {xdf_file}")
     data, header = pyxdf.load_xdf(xdf_file)
     if xdf_file.endswith(".xdf"):
         xls_file = xdf_file[:-4] + ".xls"
     else:
         xls_file = xdf_file + ".xls"
+    log.info(f"Writting to {xls_file}")
     with pd.ExcelWriter(xls_file, engine='xlsxwriter') as writer:
         for stream in data:
             df = pd.DataFrame()
@@ -37,10 +40,13 @@ def xdf2xls(xdf_file: str) -> None:
                 df = df.join(pd.DataFrame(y))
                 names = {i: desc_to_label(desc) for i, desc in enumerate(descs)}
                 df.rename(columns=names, inplace=True)
-            df.to_excel(writer, sheet_name=stream['info']['name'][0][:31], startrow=0, startcol=0)
+            sheet_name = stream['info']['name'][0][:31]
+            log.info(f"Writting to sheet {sheet_name}")
+            df.to_excel(writer, sheet_name=sheet_name, startrow=0, startcol=0)
 
 
 def main():
+    log.basicConfig(format="%(asctime)-15s [%(levelname)-8s]: %(message)s", level=log.INFO)
     try:
         xdf_file = sys.argv[1]
     except IndexError:
