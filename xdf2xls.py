@@ -1,9 +1,11 @@
+import os.path
 import sys
 import logging as log
 
 import pyxdf
 import pandas as pd
 import numpy as np
+import scipy.io.wavfile as wavf
 
 
 def desc_to_label(desc):
@@ -19,15 +21,22 @@ def xdf2xls(xdf_file: str) -> None:
     log.info(f"Opening {xdf_file}")
     data, header = pyxdf.load_xdf(xdf_file)
     if xdf_file.endswith(".xdf"):
-        xls_file = xdf_file[:-4] + ".xls"
+        root_name = xdf_file[:-4]
     else:
-        xls_file = xdf_file + ".xls"
+        root_name = xdf_file
+    xls_file = root_name + ".xls"
     log.info(f"Writting to {xls_file}")
     with pd.ExcelWriter(xls_file, engine='xlsxwriter') as writer:
         for stream in data:
+            y = stream['time_series']
+            if 'Audio' in stream['info']['type']:
+                fs = int(float(stream['info']['nominal_srate'][0]))
+                wf = f"{root_name}_{stream['info']['name'][0]}.wav"
+                log.info(f"Exporting audio {wf}")
+                wavf.write(wf, fs, y)
+                continue
             df = pd.DataFrame()
             df['timestamps'] = stream['time_stamps']
-            y = stream['time_series']
             try:
                 descs = stream['info']['desc'][0]['channels'][0]['channel']
             except IndexError:
