@@ -1,6 +1,6 @@
-# XDF2XLS
+# XDF2XLSX
 
-Simple script to convert [XDF](https://github.com/sccn/xdf) files to Microsoft Excel's [XLS](https://en.wikipedia.org/wiki/Microsoft_Excel#File_formats).
+Simple script to convert [XDF](https://github.com/sccn/xdf) files to Microsoft Excel's [XLSX](https://en.wikipedia.org/wiki/Microsoft_Excel#File_formats).
 
 You probably don't want to use this script, because
 * Why on earth would you want raw experiment data in Excel?
@@ -18,6 +18,6 @@ xdf2xls.py data.xdf
 
 If you're on Windows, you can also just drag and drop your `xdf` file on the Python script.
 
-It'll generate an `xls` file somewhere on your computer. Most likely near where the `xdf` file was, but maybe not?
+It'll generate an `xlsx` file somewhere on your computer. Most likely near where the `xdf` file was, but maybe not?
 
 My best advice is to not run the script at all.
