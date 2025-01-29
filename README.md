@@ -1,4 +1,4 @@
-# XDF2XLSX
+# xdf2xlsx
 
 Simple script to convert [XDF](https://github.com/sccn/xdf) files to Microsoft Excel's [XLSX](https://en.wikipedia.org/wiki/Microsoft_Excel#File_formats).
 
@@ -13,7 +13,7 @@ If after that you still want to use this script, I'd advise you to reconsider yo
 ## How to run
 
 ```
-xdf2xls.py data.xdf
+xdf2xlsx.py data.xdf
 ```
 
 If you're on Windows, you can also just drag and drop your `xdf` file on the Python script.

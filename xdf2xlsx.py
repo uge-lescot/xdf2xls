@@ -1,4 +1,3 @@
-import os.path
 import sys
 import logging as log
 
@@ -17,16 +16,16 @@ def desc_to_label(desc):
     return s
 
 
-def xdf2xls(xdf_file: str) -> None:
+def xdf2xlsx(xdf_file: str) -> None:
     log.info(f"Opening {xdf_file}")
     data, header = pyxdf.load_xdf(xdf_file)
     if xdf_file.endswith(".xdf"):
         root_name = xdf_file[:-4]
     else:
         root_name = xdf_file
-    xls_file = root_name + ".xls"
-    log.info(f"Writting to {xls_file}")
-    with pd.ExcelWriter(xls_file, engine='xlsxwriter') as writer:
+    xlsx_file = root_name + ".xlsx"
+    log.info(f"Writting to {xlsx_file}")
+    with pd.ExcelWriter(xlsx_file, engine='xlsxwriter') as writer:
         for stream in data:
             y = stream['time_series']
             if 'Audio' in stream['info']['type']:
@@ -61,7 +60,7 @@ def main():
     except IndexError:
         return
     else:
-        xdf2xls(xdf_file)
+        xdf2xlsx(xdf_file)
 
 
 if __name__ == '__main__':
